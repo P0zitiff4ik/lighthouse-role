@@ -1,9 +1,11 @@
 - name: Nginx systemd
+  become: true
   ansible.builtin.systemd:
     name: nginx
     enabled: true
     state: started
 - name: Change lighthouse default host
+  become: true
   when: lh_exists.state == "absent"
   ansible.builtin.replace:
     path: "{{ lighthouse_path }}/app.js"
@@ -12,6 +14,7 @@
     unsafe_writes: true
   notify: Restart Nginx
 - name: Create Lighthouse config
+  become: true
   ansible.builtin.template:
     src: lighthouse.conf.j2
     dest: /etc/nginx/conf.d/lighthouse.conf
